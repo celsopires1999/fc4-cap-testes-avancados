@@ -22,7 +22,7 @@ public class OrderDataBuilder
 
     public static OrderDataBuilder AnOrder() => new OrderDataBuilder();
 
-    public OrderDataBuilder With(CustomerDataBuilder customerDataBuilder)
+    public OrderDataBuilder From(CustomerDataBuilder customerDataBuilder)
     {
         _customer = customerDataBuilder.Build();
         return this;
