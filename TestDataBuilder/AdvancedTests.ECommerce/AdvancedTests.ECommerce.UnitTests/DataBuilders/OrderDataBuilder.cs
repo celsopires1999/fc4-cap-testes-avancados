@@ -7,6 +7,7 @@ public class OrderDataBuilder
     private Customer _customer;
     private Address _address;
     private List<OrderItem> _items;
+    private bool _defaultItems = true;
 
     public OrderDataBuilder()
     {
@@ -17,6 +18,14 @@ public class OrderDataBuilder
             new OrderItemDataBuilder().Build(),
             new OrderItemDataBuilder().Build()
         ];
+    }
+
+    public static OrderDataBuilder AnOrder() => new OrderDataBuilder();
+
+    public OrderDataBuilder With(CustomerDataBuilder customerDataBuilder)
+    {
+        _customer = customerDataBuilder.Build();
+        return this;
     }
 
     public OrderDataBuilder WithCustomer(Customer customer)
@@ -31,9 +40,22 @@ public class OrderDataBuilder
         return this;
     }
 
-    public OrderDataBuilder WithItems(List<OrderItem> items)
+    public OrderDataBuilder WithItems(params OrderItem[] items)
     {
-        _items = items;
+        _items.Clear();
+        _items.AddRange(items);
+        return this;
+    }
+
+    public OrderDataBuilder WithItem(int quantity, decimal price)
+    {
+        if (_defaultItems)
+        {
+            _items.Clear();
+            _defaultItems = false;
+        }
+
+        _items.Add(new OrderItemDataBuilder().WithQuantity(quantity).WithPrice(price).Build());
         return this;
     }
 
