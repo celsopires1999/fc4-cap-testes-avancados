@@ -1,65 +1,58 @@
 using AdvancedTests.ECommerce.Domain;
+using AdvancedTests.ECommerce.UnitTests.DataBuilders;
 using FluentAssertions;
 
 namespace AdvancedTests.ECommerce.UnitTests.Domain;
 
 public class AddressTest
 {
-    public static Address CreateAddress(
-        string street = "Rua 1",
-        string city = "São Paulo")
-    {
-        var state = "SP";
-        var zipCode = "98101-123";
-        var number = 123;
-        return new Address(street, city, state, zipCode, number);
-    }
-    
+
     [Fact]
     public void ThrowsExceptionWhenConstructingAndStreetIsNull()
     {
-        
-
-        var act = () => CreateAddress(null!);
+        var act = () => new AddressDataBuilder().WithStreet(null!).Build();
 
         act.Should().Throw<ArgumentNullException>();
     }
-    
+
     [Fact]
     public void ThrowsExceptionWhenConstructingAndStreetIsEmpty()
     {
-        var street = "";
-        var city = "São Paulo";
-        var state = "SP";
-        var zipCode = "98101-123";
-        var number = 123;
 
-        var act = () => new Address(street, city, state, zipCode, number);
+        var act = () => new AddressDataBuilder().WithStreet("").Build();
 
         act.Should().Throw<ArgumentException>();
     }
-    
+
     [Fact]
     public void ThrowsExceptionWhenConstructingAndCityIsNull()
     {
         string city = null!;
 
-        var act = () => CreateAddress(city: city);
+        var act = () => new AddressDataBuilder().WithCity(city).Build();
 
         act.Should().Throw<ArgumentNullException>();
     }
-    
+
     [Fact]
     public void ThrowsExceptionWhenConstructingAndCityIsEmpty()
     {
-        var street = "Rua 1";
-        var city = "";
-        var state = "SP";
-        var zipCode = "98101-123";
-        var number = 123;
-
-        var act = () => new Address(street, city, state, zipCode, number);
+        var act = () => new AddressDataBuilder().WithCity("").Build();
 
         act.Should().Throw<ArgumentException>();
     }
+
+    [Fact]
+    public void CreatesValidAddress()
+    {
+        var address = new AddressDataBuilder().Build();
+
+        address.Should().NotBeNull();
+        address.Street.Should().NotBeNullOrWhiteSpace();
+        address.City.Should().NotBeNullOrWhiteSpace();
+        address.State.Should().NotBeNullOrWhiteSpace();
+        address.ZipCode.Should().MatchRegex(@"^\d{5}-?\d{3}$");
+        address.Number.Should().BeGreaterThan(0);
+    }
+
 }

@@ -1,0 +1,1 @@
+Este projeto é parte integrante do curso "Testes Avançados com C# e .NET" do Full Cycle 4.0, onde você aprenderá técnicas avançadas de testes.
