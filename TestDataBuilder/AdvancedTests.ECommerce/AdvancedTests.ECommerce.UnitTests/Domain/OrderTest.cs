@@ -1,3 +1,4 @@
+using AdvancedTests.ECommerce.Domain;
 using AdvancedTests.ECommerce.UnitTests.DataBuilders;
 using FluentAssertions;
 using static AdvancedTests.ECommerce.UnitTests.DataBuilders.CustomerDataBuilder;
@@ -53,5 +54,16 @@ public class OrderTest
         order.Amount.Should().Be(170);
     }
 
+    [Fact]
+    public void ThrowsAnExceptionWhenTryingToCancelADeliveredOrder()
+    {
+        var order = AnOrder()
+            .WithStatus(OrderStatus.Delivered)
+            .Build();
 
+        Action act = () => order.Cancel();
+
+        act.Should().Throw<InvalidOperationException>()
+        .WithMessage("Itens entregues não podem ser cancelados.");
+    }
 }
