@@ -38,7 +38,8 @@
 				"GitHub.vscode-pull-request-github",
 				"eamodio.gitlens",
 				"humao.rest-client",
-				"ms-azuretools.vscode-containers"
+				"ms-azuretools.vscode-containers",
+				"Codeium.codeium"
 			]
 		}
 	}
