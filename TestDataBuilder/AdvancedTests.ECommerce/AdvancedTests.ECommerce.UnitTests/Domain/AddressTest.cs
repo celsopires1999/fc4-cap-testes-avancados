@@ -1,4 +1,5 @@
-using AdvancedTests.ECommerce.Domain;
+using AdvancedTests.ECommerce.Domain.Entities;
+
 using AdvancedTests.ECommerce.UnitTests.DataBuilders;
 using FluentAssertions;
 
