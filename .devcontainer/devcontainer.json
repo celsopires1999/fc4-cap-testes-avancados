@@ -29,7 +29,7 @@
 	//		}
 	// }
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "npm install -g @google/gemini-cli",
+	"postCreateCommand": "dotnet tool install -g dotnet-stryker",
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {

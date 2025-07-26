@@ -23,11 +23,11 @@ public class OrderTest
     {
         var anOrder = AnOrder()
             .From(APremiumCustomer())
-            .WithItem(quantity: 2, price: 10)
-            .WithItem(quantity: 4, price: 20)
+            .WithItem(quantity: 2, price: 1_000)
+            .WithItem(quantity: 4, price: 2_000)
             .Build();
 
-        anOrder.Amount.Should().Be(90);
+        anOrder.Amount.Should().Be(9_000);
     }
 
     [Fact]
@@ -137,5 +137,23 @@ public class OrderTest
 
         act.Should().Throw<InvalidOperationException>()
             .WithMessage("Somente itens no status 'Enviado' podem ser entregues.");
+    }
+
+    [Fact]
+    public void AddItemToOrderWhenStatusIsCreated()
+    {
+        var order = AnOrder()
+            .WithStatus(OrderStatus.Created)
+            .Build();
+
+        var item = AnOrderItem()
+            .WithName("Refactoring")
+            .WithPrice(100)
+            .WithQuantity(1)
+            .Build();
+
+        order.AddItem(item);
+
+        order.Items.Should().Contain(item);
     }
 }
