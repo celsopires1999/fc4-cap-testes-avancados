@@ -13,8 +13,14 @@
 			"plugins": "git git-flow F-Sy-H zsh-autosuggestions zsh-completions",
 			"omzPlugins": "https://github.com/z-shell/F-Sy-H https://github.com/zsh-users/zsh-autosuggestions https://github.com/zsh-users/zsh-completions"
 		},
-		"ghcr.io/devcontainers/features/docker-in-docker:2": {}
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {},
+		"ghcr.io/devcontainers/features/node:1": {}
 	},
+
+	// "mounts": [
+	// 	 "source=/home/user/.gemini,target=/home/vscode/.gemini,type=bind,consistency=cached"
+	// ],
+
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [5000, 5001],
 	// "portsAttributes": {
@@ -23,7 +29,7 @@
 	//		}
 	// }
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "dotnet restore",
+	// "postCreateCommand": "npm install -g @google/gemini-cli",
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
@@ -40,7 +46,8 @@
 				"eamodio.gitlens",
 				"humao.rest-client",
 				"ms-azuretools.vscode-containers",
-				"Codeium.codeium"
+				// "Codeium.codeium",
+				"Google.geminicodeassist"
 			]
 		}
 	}

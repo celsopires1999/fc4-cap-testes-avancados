@@ -66,4 +66,76 @@ public class OrderTest
         act.Should().Throw<InvalidOperationException>()
         .WithMessage("Itens entregues não podem ser cancelados.");
     }
+
+    [Theory]
+    [InlineData(OrderStatus.Confirmed)]
+    [InlineData(OrderStatus.Paid)]
+    [InlineData(OrderStatus.Shipped)]
+    [InlineData(OrderStatus.Delivered)]
+    [InlineData(OrderStatus.Cancelled)]
+    public void ThrowsAnExceptionWhenTryingToConfirmAnOrderWithInvalidStatus(OrderStatus invalidStatus)
+    {
+        var order = AnOrder()
+            .WithStatus(invalidStatus)
+            .Build();
+
+        Action act = () => order.Confirm();
+
+        act.Should().Throw<InvalidOperationException>()
+            .WithMessage("Somente itens no status 'Criado' podem ser confirmados.");
+    }
+
+    [Theory]
+    [InlineData(OrderStatus.Created)]
+    [InlineData(OrderStatus.Paid)]
+    [InlineData(OrderStatus.Shipped)]
+    [InlineData(OrderStatus.Delivered)]
+    [InlineData(OrderStatus.Cancelled)]
+    public void ThrowsAnExceptionWhenTryingToPayAnOrderWithInvalidStatus(OrderStatus invalidStatus)
+    {
+        var order = AnOrder()
+            .WithStatus(invalidStatus)
+            .Build();
+
+        Action act = () => order.Pay();
+
+        act.Should().Throw<InvalidOperationException>()
+            .WithMessage("Somente itens no status 'Confirmado' podem ser pagos.");
+    }
+
+    [Theory]
+    [InlineData(OrderStatus.Created)]
+    [InlineData(OrderStatus.Confirmed)]
+    [InlineData(OrderStatus.Shipped)]
+    [InlineData(OrderStatus.Delivered)]
+    [InlineData(OrderStatus.Cancelled)]
+    public void ThrowsAnExceptionWhenTryingToShipAnOrderWithInvalidStatus(OrderStatus invalidStatus)
+    {
+        var order = AnOrder()
+            .WithStatus(invalidStatus)
+            .Build();
+
+        Action act = () => order.Ship();
+
+        act.Should().Throw<InvalidOperationException>()
+            .WithMessage("Somente itens no status 'Pago' podem ser enviados.");
+    }
+
+    [Theory]
+    [InlineData(OrderStatus.Created)]
+    [InlineData(OrderStatus.Confirmed)]
+    [InlineData(OrderStatus.Paid)]
+    [InlineData(OrderStatus.Delivered)]
+    [InlineData(OrderStatus.Cancelled)]
+    public void ThrowsAnExceptionWhenTryingToDeliverAnOrderWithInvalidStatus(OrderStatus invalidStatus)
+    {
+        var order = AnOrder()
+            .WithStatus(invalidStatus)
+            .Build();
+
+        Action act = () => order.Deliver();
+
+        act.Should().Throw<InvalidOperationException>()
+            .WithMessage("Somente itens no status 'Enviado' podem ser entregues.");
+    }
 }
