@@ -17,9 +17,16 @@ public class OrderTest
         act.Should().Throw<ArgumentNullException>();
     }
 
+    [Fact]
+    public void ThrowsAnExceptionWhenConstructionWithItemsNull()
+    {
+        var act = () => new OrderDataBuilder().WithItems(null!).Build();
+
+        act.Should().Throw<ArgumentNullException>();
+    }
 
     [Fact]
-    public void Give10PercentDiscountForPremiumCustomer()
+    public void Give10PercentDiscountForPremiumCustomerWhenTotalIsGreaterThan1_000()
     {
         var anOrder = AnOrder()
             .From(APremiumCustomer())
@@ -28,6 +35,29 @@ public class OrderTest
             .Build();
 
         anOrder.Amount.Should().Be(9_000);
+    }
+
+    [Fact]
+    public void GiveNoDiscountForPremiumCustomerWhenTotalIsEqualOrLowerThan1_000()
+    {
+        var anOrder = AnOrder()
+            .From(APremiumCustomer())
+            .WithItem(quantity: 1, price: 1_000)
+            .Build();
+
+        anOrder.Amount.Should().Be(1_000);
+    }
+
+    [Fact]
+    public void GiveNoDiscountForRegularCustomerWhenTotalIsGreaterThan1_000()
+    {
+        var anOrder = AnOrder()
+            .From(ARegularCustomer())
+            .WithItem(quantity: 2, price: 1_000)
+            .WithItem(quantity: 4, price: 2_000)
+            .Build();
+
+        anOrder.Amount.Should().Be(10_000);
     }
 
     [Fact]
@@ -140,10 +170,38 @@ public class OrderTest
     }
 
     [Fact]
+    public void ThrowsAnExceptionWhenTryingToAddANullItemToOrder()
+    {
+        var order = AnOrder()
+            .WithStatus(OrderStatus.Created)
+            .Build();
+
+        Action act = () => order.AddItem(null!);
+
+        act.Should().Throw<ArgumentNullException>();
+    }
+
+    [Fact]
+    public void ThrowsExceptionWhenAddItemToOrderButStatusDoesntAllowIt()
+    {
+        var order = AnOrder()
+            .WithStatus(OrderStatus.Paid)
+            .Build();
+        
+        var item = AnOrderItem().Build();
+        
+        var act = () => order.AddItem(item);
+        
+        act.Should().Throw<InvalidOperationException>()
+            .WithMessage("Item não pode ser adicionado ao pedido.");
+    }
+
+    [Fact]
     public void AddItemToOrderWhenStatusIsCreated()
     {
         var order = AnOrder()
             .WithStatus(OrderStatus.Created)
+            .WithItem(quantity: 1, price: 10)
             .Build();
 
         var item = AnOrderItem()
@@ -155,5 +213,6 @@ public class OrderTest
         order.AddItem(item);
 
         order.Items.Should().Contain(item);
+        order.Amount.Should().Be(110);
     }
 }

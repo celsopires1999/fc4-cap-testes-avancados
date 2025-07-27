@@ -17,6 +17,7 @@ public class Order
     {
         Customer = Guard.Against.Null(customer);
         Address = Guard.Against.Null(address);
+        // Stryker disable once all: we want to keep this validation, even if it is not necessary
         Guard.Against.NullOrEmpty(items);
         _items.AddRange(items);
         CalculateAmount();

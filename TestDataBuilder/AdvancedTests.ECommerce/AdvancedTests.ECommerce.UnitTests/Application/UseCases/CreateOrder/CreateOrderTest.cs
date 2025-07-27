@@ -21,8 +21,10 @@ public class CreateOrderTest(CreateOrderTestFixture fixture) : IClassFixture<Cre
             .Build();
         
         var action = async () => await fixture.UseCase.ExecuteAsync(anInput);
-        
-        await action.Should().ThrowAsync<InvalidOperationException>();
+
+        await action.Should().ThrowAsync<InvalidOperationException>()
+            .WithMessage("Customer not found");
+        ;
     }
 
     [Fact]
@@ -37,13 +39,15 @@ public class CreateOrderTest(CreateOrderTestFixture fixture) : IClassFixture<Cre
         fixture.OrderRepository
             .Setup(repo => repo.AddAsync(It.IsAny<Order>()))
             .ReturnsAsync(outputId);
-        
+
         var anInput = AnOrderInput()
             .FromCustomerId(aCustomer.Id)
             .Build();
-        
+
         var output = await fixture.UseCase.ExecuteAsync(anInput);
-        
+
         output.Id.Should().Be(outputId);
+        fixture.UnitOfWork.Verify(uow => uow.BeginTransactionAsync(), Times.Once());
+        fixture.UnitOfWork.Verify(uow => uow.CommitAsync(), Times.Once());
     }
-}
+};
