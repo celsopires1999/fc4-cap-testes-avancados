@@ -1,0 +1,18 @@
+services:
+  quotation:
+    container_name: ordersdb
+    hostname: ordersdb
+    image: mysql
+    volumes:
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "3306:3306"
+    extra_hosts:
+      - host.docker.internal:host-gateway      
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+
+networks:
+  default:
+    name: ecommerce
+    external: true

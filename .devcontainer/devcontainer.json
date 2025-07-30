@@ -17,6 +17,14 @@
 		"ghcr.io/devcontainers/features/node:1": {}
 	},
 
+	"remoteEnv": {
+		"ASPNETCORE_ENVIRONMENT": "Development"
+	},
+
+	"runArgs": [
+		"--add-host=host.docker.internal:host-gateway"
+	],
+
 	// "mounts": [
 	// 	 "source=/home/user/.gemini,target=/home/vscode/.gemini,type=bind,consistency=cached"
 	// ],
