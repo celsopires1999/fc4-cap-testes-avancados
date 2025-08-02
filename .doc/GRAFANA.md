@@ -16,3 +16,19 @@ Criar um arquivo de teste de carga `load_test.js`:
 ```bash
 k6 run load_test.js
 ```
+
+Rodar o teste de carga e salvar os resultados em um arquivo JSON:
+```bash
+k6 run --summary-mode full --out json=results.json load_test.js
+```
+
+Ler os resultados do teste de carga em outro terminal:
+```bash
+tail -f results.json
+```
+
+Ver os resultados do teste de carga no dashboard do Grafana. Após executar o comando um web dashboard será iniciado. 
+Veja a mensagem com o endereço do dashboard no terminal.
+```bash
+K6_WEB_DASHBOARD=true k6 run load_test.js
+```
