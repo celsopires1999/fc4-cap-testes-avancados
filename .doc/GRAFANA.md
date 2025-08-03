@@ -32,3 +32,8 @@ Veja a mensagem com o endereço do dashboard no terminal.
 ```bash
 K6_WEB_DASHBOARD=true k6 run load_test.js
 ```
+
+Rodar o bechmarking com o Grafana K6:
+```bash
+k6 run --summary-mode full benchmarking.js
+```
