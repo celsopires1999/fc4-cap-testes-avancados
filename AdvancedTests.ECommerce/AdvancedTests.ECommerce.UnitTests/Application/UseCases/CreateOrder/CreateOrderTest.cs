@@ -44,6 +44,14 @@ public class CreateOrderTest(CreateOrderTestFixture fixture) : IClassFixture<Cre
             .FromCustomerId(aCustomer.Id)
             .Build();
 
+        var inventory = anInput.Items
+            .GroupBy(item => item.Name)
+            .Select(group => new ProductInventory(group.Key, group.Sum(item => item.Quantity)));
+        
+        fixture.InventoryRepository.Setup(x =>
+                x.GetByProductNamesAsync(It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(inventory);
+
         var output = await fixture.UseCase.ExecuteAsync(anInput);
 
         output.Id.Should().Be(outputId);
